@@ -37,69 +37,73 @@ var m = {
 			p.accion = "numero";
 			p.digito = 0; 
 		}
-		if(tecla.keyCode == 49 || tecla.keyCode == 97){
+		else if(tecla.keyCode == 49 || tecla.keyCode == 97){
 			p.accion = "numero";
 			p.digito = 1; 
 		}
-		if(tecla.keyCode == 50 || tecla.keyCode == 98){
+		else if(tecla.keyCode == 50 || tecla.keyCode == 98){
 			p.accion = "numero";
 			p.digito = 2; 
 		}
-		if(tecla.keyCode == 51 || tecla.keyCode == 99){
+		else if(tecla.keyCode == 51 || tecla.keyCode == 99){
 			p.accion = "numero";
 			p.digito = 3; 
 		}
-		if(tecla.keyCode == 52 || tecla.keyCode == 100){
+		else if(tecla.keyCode == 52 || tecla.keyCode == 100){
 			p.accion = "numero";
 			p.digito = 4; 
 		}
-		if(tecla.keyCode == 53 || tecla.keyCode == 101){
+		else if(tecla.keyCode == 53 || tecla.keyCode == 101){
 			p.accion = "numero";
 			p.digito = 5; 
 		}
-		if(tecla.keyCode == 54 || tecla.keyCode == 102){
+		else if(tecla.keyCode == 54 || tecla.keyCode == 102){
 			p.accion = "numero";
 			p.digito = 6; 
 		}
-		if(tecla.keyCode == 55 || tecla.keyCode == 103){
+		else if(tecla.keyCode == 55 || tecla.keyCode == 103){
 			p.accion = "numero";
 			p.digito = 7; 
 		}
-		if(tecla.keyCode == 56 || tecla.keyCode == 104){
+		else if(tecla.keyCode == 56 || tecla.keyCode == 104){
 			p.accion = "numero";
 			p.digito = 8; 
 		}
-		if(tecla.keyCode == 57 || tecla.keyCode == 105){
+		else if(tecla.keyCode == 57 || tecla.keyCode == 105){
 			p.accion = "numero";
 			p.digito = 9; 
 		}
-		if(tecla.keyCode == 187 || tecla.keyCode == 107){
+		else if(tecla.keyCode == 187 || tecla.keyCode == 107){
 			p.accion = "signo";
 			p.digito = "+"; 
 		}
-		if(tecla.keyCode == 189 || tecla.keyCode == 109){
+		else if(tecla.keyCode == 189 || tecla.keyCode == 109){
 			p.accion = "signo";
 			p.digito = "-"; 
 		}
-		if(tecla.keyCode == 88 || tecla.keyCode == 106){
+		else if(tecla.keyCode == 88 || tecla.keyCode == 106){
 			p.accion = "signo";
 			p.digito = "*"; 
 		}
-		if(tecla.keyCode == 111){
+		else if(tecla.keyCode == 111){
 			p.accion = "signo";
 			p.digito = "/"; 
 		}
-		if(tecla.keyCode == 190 || tecla.keyCode == 110){
+		else if(tecla.keyCode == 190 || tecla.keyCode == 110){
 			p.accion = "decimal";
 			p.digito = "."; 
 		}
-		if(tecla.keyCode == 13){
+		else if(tecla.keyCode == 13){
 			p.accion = "igual"; 
 		}
-		if(tecla.keyCode == 8){//borrar-delete
+		else if(tecla.keyCode == 8){//borrar-delete
+			p.accion = "";
 			m.borrarCalculadora();
 		}
-
+		else{
+			p.accion = "";
+			p.digito = "";
+		}
 		m.calculadora(p.accion, p.digito);
 	},
 
@@ -117,7 +121,7 @@ var m = {
 
 				p.cantidadSignos = 0;
 
-				if(p.operaciones.innerHTML == 0)
+				if(p.operaciones.innerHTML == "0")
 					p.operaciones.innerHTML = digito;
 				else{
 					if(p.resultado){
@@ -134,8 +138,8 @@ var m = {
 			case "signo":
 				p.cantidadSignos++;
 
-				if(p.cantidadSignos == 1){
-					if(p.operaciones.innerHTML == 0){
+				if(p.cantidadSignos == "1"){
+					if(p.operaciones.innerHTML == "0"){
 						p.operaciones.innerHTML = 0;
 					}
 					else{
@@ -146,7 +150,7 @@ var m = {
 				}
 			break;
 			case "decimal":
-				if(!p.cantidadDecimal){
+				if(!p.cantidadDecimal && p.cantidadSignos!= 1){
 					p.operaciones.innerHTML += digito;
 					p.cantidadDecimal = true;
 					p.resultado = false;
@@ -155,12 +159,18 @@ var m = {
 			break;
 			case "igual":
 				p.operaciones.innerHTML = eval(p.operaciones.innerHTML);//Ejecuta la operacion dentro de la caja
+				
+				var expresion = /./g;
+				if(!expresion.test(p.operaciones.innerHTML)){
+					p.cantidadDecimal = true;
+				}
 				p.resultado = true;
 			break;
 		}
 	},
 
 	borrarCalculadora: function(){
+		p.resultado = false;
 		p.operaciones.innerHTML = 0;
 	}
 }
