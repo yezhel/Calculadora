@@ -7,7 +7,9 @@ var p = {
 	accion: null,
 	digito: null,
 	operaciones: document.querySelector("#operaciones"),
-	cantidadSignos: 0
+	cantidadSignos: 0,
+	cantidadDecimal: false,
+	resultado: false
 }
 
 
@@ -22,6 +24,14 @@ var m = {
 			
 			p.teclas[i].addEventListener("click",m.oprimirTecla)
 		}
+	},
+
+	teclado: function(){
+		document.addEventListener("keydown", m.oprimir)
+	},
+
+	oprimir: function(tecla){
+		console.log(tecla.keyCode);
 	},
 
 	oprimirTecla: function(tecla){
@@ -40,8 +50,17 @@ var m = {
 
 				if(p.operaciones.innerHTML == 0)
 					p.operaciones.innerHTML = digito;
-				else
-					p.operaciones.innerHTML += digito;
+				else{
+					if(p.resultado){
+						p.resultado = false;
+						p.operaciones.innerHTML = digito;
+					}
+					else{
+						p.operaciones.innerHTML += digito;
+					}
+				}
+
+
 			break;
 			case "signo":
 				p.cantidadSignos++;
@@ -52,14 +71,22 @@ var m = {
 					}
 					else{
 						p.operaciones.innerHTML += digito;
+						p.cantidadDecimal = false;
+						p.resultado = false;
 					}
 				}
 			break;
 			case "decimal":
-				console.log("decimal");
+				if(!p.cantidadDecimal){
+					p.operaciones.innerHTML += digito;
+					p.cantidadDecimal = true;
+					p.resultado = false;
+				}
+				
 			break;
 			case "igual":
-				console.log("igual");
+				p.operaciones.innerHTML = eval(p.operaciones.innerHTML);//Ejecuta la operacion dentro de la caja
+				p.resultado = true;
 			break;
 		}
 	},
@@ -70,3 +97,4 @@ var m = {
 }
 
 m.inicio();
+m.teclado();
